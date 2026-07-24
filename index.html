@@ -932,7 +932,7 @@ function nailPathD(shape,x,y,rx,ry){
   return `M ${x-rx} ${y} A ${rx} ${ry} 0 1 1 ${x+rx} ${y} A ${rx} ${ry} 0 1 1 ${x-rx} ${y} Z`;
 }
 function nailSVG(){
-  const SKIN='#FCD7BE', SKD='#E0A379';
+  const SKIN='#F4CBA4', SKD='#5B4636';
   // 진짜 손 비율: 가늘고 긴 손가락(중지가 가장 길게), 좁아지는 손목
   const parts=[
     `<path d="M96 210 C96 200 104 194 114 194 L206 194 C216 194 224 200 224 210 L226 264 C226 296 210 314 186 318 L186 330 L134 330 L134 318 C110 314 94 296 94 264 Z"/>`,
@@ -943,39 +943,39 @@ function nailSVG(){
     `<rect x="222" y="170" width="25" height="82" rx="12.5" transform="rotate(37 234 244)"/>`
   ];
   const nails=[
-    {x:103.5, y:166, rx:9, ry:12, rot:'rotate(8 103 218)'},
-    {x:135.5, y:123, rx:10, ry:13.5, rot:'rotate(3 135 220)'},
-    {x:168, y:111, rx:10.5, ry:14, rot:''},
-    {x:199.5, y:127, rx:10, ry:13.5, rot:'rotate(-3.5 199 222)'},
-    {x:234.5, y:184, rx:9.5, ry:12.5, rot:'rotate(37 234 244)'}
+    {x:103.5, y:158, rx:9, ry:18, rot:'rotate(8 103 218)'},
+    {x:135.5, y:114, rx:10, ry:20, rot:'rotate(3 135 220)'},
+    {x:168, y:102, rx:10.5, ry:21, rot:''},
+    {x:199.5, y:118, rx:10, ry:20, rot:'rotate(-3.5 199 222)'},
+    {x:234.5, y:178, rx:9.5, ry:17, rot:'rotate(37 234 244)'}
   ];
   let s=`<svg viewBox="0 0 320 360" style="max-width:100%;max-height:100%;">
   <defs><linearGradient id="ngb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CDEFFF"/><stop offset=".55" stop-color="#DEF3F1"/><stop offset="1" stop-color="#E9F7EC"/></linearGradient>
   <radialGradient id="skinG" cx="42%" cy="28%" r="82%"><stop offset="0" stop-color="#FFE7D4"/><stop offset="1" stop-color="#F1C09E"/></radialGradient>
-  <linearGradient id="pillowG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D3C8F6"/><stop offset="1" stop-color="#A99BE6"/></linearGradient></defs>
+  <linearGradient id="pillowG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9AAEEC"/><stop offset="1" stop-color="#6E86D8"/></linearGradient></defs>
   <rect width="320" height="360" fill="url(#ngb)"/>
   <g fill="#fff" opacity=".5"><circle cx="36" cy="44" r="10"/><circle cx="286" cy="58" r="8"/><circle cx="300" cy="200" r="7"/><circle cx="22" cy="230" r="7"/></g>
   <g class="floaty" style="animation-delay:.5s"><text x="30" y="120" font-size="20">💖</text></g>
   <g class="floaty"><text x="272" y="150" font-size="18">✨</text></g>
   <ellipse cx="160" cy="356" rx="124" ry="12" fill="rgba(80,60,110,.13)"/>
   <path d="M52 178 Q40 150 68 146 Q160 132 252 146 Q280 150 268 178 Q282 258 268 304 Q272 330 244 328 Q160 340 76 328 Q48 330 52 304 Q38 250 52 178 Z" fill="url(#pillowG)"/>
-  <path d="M64 182 Q160 164 256 182 Q246 212 160 216 Q74 212 64 182 Z" fill="#E0D8FA" opacity=".5"/>
-  <g fill="#9182D2" opacity=".4"><circle cx="62" cy="160" r="4"/><circle cx="258" cy="160" r="4"/><circle cx="62" cy="320" r="4"/><circle cx="258" cy="320" r="4"/></g>
+  <path d="M64 182 Q160 164 256 182 Q246 212 160 216 Q74 212 64 182 Z" fill="#BFCCF5" opacity=".55"/>
+  <g fill="#5A72C8" opacity=".45"><circle cx="62" cy="160" r="4"/><circle cx="258" cy="160" r="4"/><circle cx="62" cy="320" r="4"/><circle cx="258" cy="320" r="4"/></g>
   <ellipse cx="160" cy="300" rx="98" ry="22" fill="rgba(60,40,90,.06)"/>`;
   // 1차: 외곽선용 (테두리 포함)  2차: 같은 모양 다시 그려 내부 경계선 지움 → 매끈한 실루엣
-  s+=`<g fill="${SKIN}" stroke="${SKD}" stroke-width="4">${parts.join('')}</g>`;
-  s+=`<g fill="url(#skinG)">${parts.join('')}</g>`;
+  s+=`<g fill="${SKIN}" stroke="${SKD}" stroke-width="6" stroke-linejoin="round">${parts.join('')}</g>`;
+  s+=`<g fill="${SKIN}">${parts.join('')}</g>`;
   // 은은한 음영: 손가락 사이 + 마디 주름
-  s+=`<g stroke="${SKD}" stroke-width="2" opacity=".35" fill="none">
-      <path d="M120 208 v-16 M152 204 v-18 M184 206 v-16"/>
-      <path d="M96 194 q7 4 14 0" transform="rotate(8 103 218)"/>
-      <path d="M128 166 q7 4 14 0" transform="rotate(3 135 220)"/>
-      <path d="M161 156 q7 4 14 0"/>
-      <path d="M193 170 q7 4 14 0" transform="rotate(-3.5 199 222)"/></g>`;
+  s+=`<g stroke="${SKD}" stroke-width="4.5" opacity=".9" fill="none" stroke-linecap="round">
+      <path d="M119 191 q1 15 1 24 M151 189 q0 15 0 24 M183 191 q-1 15 -1 24"/></g>`;
+  s+=`<g stroke="${SKD}" stroke-width="2.4" opacity=".5" fill="none" stroke-linecap="round">
+      <path d="M96 190 q7 4 14 0" transform="rotate(8 103 218)"/>
+      <path d="M128 160 q7 4 14 0" transform="rotate(3 135 220)"/>
+      <path d="M161 150 q7 4 14 0"/>
+      <path d="M193 164 q7 4 14 0" transform="rotate(-3.5 199 222)"/>
+      <path d="M122 276 q38 13 76 0"/></g>`;
   // 손등 하이라이트
-  s+=`<ellipse cx="160" cy="250" rx="44" ry="30" fill="#fff" opacity=".14"/>`;
-  // 반지 (약지)
-  s+=`<g transform="rotate(3 135 220)"><rect x="124" y="150" width="24" height="6.5" rx="3.2" fill="#FFD54F" stroke="#DBA928" stroke-width="1.6"/><circle cx="136" cy="146" r="3.6" fill="#FF9EC0" stroke="#E85D8A" stroke-width="1.4"/></g>`;
+  s+=`<ellipse cx="150" cy="298" rx="46" ry="26" fill="rgba(91,70,54,.06)"/>`;
   // 소매 (조개 주름 커프스)
   s+=`<rect x="118" y="328" width="84" height="24" rx="6" fill="#FF9EC0" stroke="#E85D8A" stroke-width="3.5"/>
       <path d="M118 330 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0" fill="#FF9EC0" stroke="#E85D8A" stroke-width="3.5"/>
@@ -989,7 +989,7 @@ function nailSVG(){
     if(des==='gradient'){ s+=g+`<defs><linearGradient id="ng${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(col,0.28)}"/><stop offset="1" stop-color="${shade(col,-0.10)}"/></linearGradient></defs>`; fill=`url(#ng${i})`; }
     else { s+=g; }
     s+=`<clipPath id="${cid}"><path d="${d}"/></clipPath>`;
-    s+=`<path class="nail" data-i="${i}" d="${d}" fill="${fill}" stroke="${i===nailSel?'#FF6E9C':'#E9BFA5'}" stroke-width="${i===nailSel?3.5:2.2}" stroke-linejoin="round"/>`;
+    s+=`<path class="nail" data-i="${i}" d="${d}" fill="${fill}" stroke="${i===nailSel?'#FF6E9C':'#C79A7A'}" stroke-width="${i===nailSel?3.5:2.4}" stroke-linejoin="round"/>`;
     if(des==='french') over=`<rect x="${n.x-n.rx-2}" y="${n.y-n.ry*1.6}" width="${n.rx*2+4}" height="${n.ry*0.8}" fill="#ffffff"/>`;
     else if(des==='dots') over=`<g fill="#ffffff">`+[[-.3,-.2],[.35,-.35],[0,.12],[-.35,.35],[.32,.28]].map(o=>`<circle cx="${n.x+o[0]*n.rx*1.4}" cy="${n.y+o[1]*n.ry*1.4}" r="1.7"/>`).join('')+`</g>`;
     else if(des==='glitter') over=`<g fill="#ffffff" opacity=".9">`+[[-.4,-.5],[.1,-.6],[.42,-.3],[-.5,0],[.35,.1],[-.15,.22],[.45,.45],[-.35,.5],[.05,.55]].map(o=>`<circle cx="${n.x+o[0]*n.rx*1.3}" cy="${n.y+o[1]*n.ry*1.3}" r="1"/>`).join('')+`</g><g fill="#FFDF8A">`+[[.16,-.26],[-.26,.36],[.3,-.5]].map(o=>`<circle cx="${n.x+o[0]*n.rx*1.3}" cy="${n.y+o[1]*n.ry*1.3}" r="1.3"/>`).join('')+`</g>`;
