@@ -950,15 +950,21 @@ function nailSVG(){
     {x:234.5, y:184, rx:9.5, ry:12.5, rot:'rotate(37 234 244)'}
   ];
   let s=`<svg viewBox="0 0 320 360" style="max-width:100%;max-height:100%;">
-  <defs><linearGradient id="ngb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9F2"/><stop offset="1" stop-color="#FFD3E4"/></linearGradient></defs>
+  <defs><linearGradient id="ngb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CDEFFF"/><stop offset=".55" stop-color="#DEF3F1"/><stop offset="1" stop-color="#E9F7EC"/></linearGradient>
+  <radialGradient id="skinG" cx="42%" cy="28%" r="82%"><stop offset="0" stop-color="#FFE7D4"/><stop offset="1" stop-color="#F1C09E"/></radialGradient>
+  <linearGradient id="pillowG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D3C8F6"/><stop offset="1" stop-color="#A99BE6"/></linearGradient></defs>
   <rect width="320" height="360" fill="url(#ngb)"/>
   <g fill="#fff" opacity=".5"><circle cx="36" cy="44" r="10"/><circle cx="286" cy="58" r="8"/><circle cx="300" cy="200" r="7"/><circle cx="22" cy="230" r="7"/></g>
   <g class="floaty" style="animation-delay:.5s"><text x="30" y="120" font-size="20">💖</text></g>
   <g class="floaty"><text x="272" y="150" font-size="18">✨</text></g>
-  <ellipse cx="160" cy="346" rx="110" ry="11" fill="rgba(90,50,80,.10)"/>`;
+  <ellipse cx="160" cy="356" rx="124" ry="12" fill="rgba(80,60,110,.13)"/>
+  <path d="M52 178 Q40 150 68 146 Q160 132 252 146 Q280 150 268 178 Q282 258 268 304 Q272 330 244 328 Q160 340 76 328 Q48 330 52 304 Q38 250 52 178 Z" fill="url(#pillowG)"/>
+  <path d="M64 182 Q160 164 256 182 Q246 212 160 216 Q74 212 64 182 Z" fill="#E0D8FA" opacity=".5"/>
+  <g fill="#9182D2" opacity=".4"><circle cx="62" cy="160" r="4"/><circle cx="258" cy="160" r="4"/><circle cx="62" cy="320" r="4"/><circle cx="258" cy="320" r="4"/></g>
+  <ellipse cx="160" cy="300" rx="98" ry="22" fill="rgba(60,40,90,.06)"/>`;
   // 1차: 외곽선용 (테두리 포함)  2차: 같은 모양 다시 그려 내부 경계선 지움 → 매끈한 실루엣
   s+=`<g fill="${SKIN}" stroke="${SKD}" stroke-width="4">${parts.join('')}</g>`;
-  s+=`<g fill="${SKIN}">${parts.join('')}</g>`;
+  s+=`<g fill="url(#skinG)">${parts.join('')}</g>`;
   // 은은한 음영: 손가락 사이 + 마디 주름
   s+=`<g stroke="${SKD}" stroke-width="2" opacity=".35" fill="none">
       <path d="M120 208 v-16 M152 204 v-18 M184 206 v-16"/>
