@@ -234,8 +234,9 @@
   <div class="screen" id="scr-nail">
     <div class="stage"><div class="board" id="nailStage" style="display:flex;align-items:center;justify-content:center;"></div></div>
     <div class="toolbar">
-      <div class="row hint">손톱을 먼저 누르고, 모양·색·보석을 골라요 ✨</div>
+      <div class="row hint">손톱을 누르고, 모양·디자인·색·보석을 골라요 ✨</div>
       <div class="row" id="nailShapes"></div>
+      <div class="row" id="nailDesigns"></div>
       <div class="row" id="nailPalette"></div>
       <div class="row" id="nailGems"></div>
     </div>
@@ -922,6 +923,7 @@ function initDress(){ const stage=$('#dressStage'); stage.innerHTML=dressSVG();
 let nailSel=0, nailInit=false, nailShape='round';
 const nailColors=['#ffffff','#ffffff','#ffffff','#ffffff','#ffffff'];
 const nailGem=[null,null,null,null,null];
+const nailDesign=['solid','solid','solid','solid','solid'];
 // 손톱 모양별 path
 function nailPathD(shape,x,y,rx,ry){
   if(shape==='square') return `M ${x-rx} ${y-ry+3} Q ${x-rx} ${y-ry} ${x-rx+3} ${y-ry} L ${x+rx-3} ${y-ry} Q ${x+rx} ${y-ry} ${x+rx} ${y-ry+3} L ${x+rx} ${y+ry-6} Q ${x} ${y+ry+2} ${x-rx} ${y+ry-6} Z`;
@@ -975,8 +977,18 @@ function nailSVG(){
   // 손톱 (선택한 모양으로)
   nails.forEach((n,i)=>{
     const g=n.rot?`<g transform="${n.rot}">`:''; const ge=n.rot?'</g>':'';
-    s+=g+`<path class="nail" data-i="${i}" d="${nailPathD(nailShape,n.x,n.y,n.rx,n.ry)}" fill="${nailColors[i]}" stroke="${i===nailSel?'#FF6E9C':'#E9BFA5'}" stroke-width="${i===nailSel?3.5:2.2}" stroke-linejoin="round"/>`;
-    if(nailColors[i]!=='#ffffff') s+=`<ellipse cx="${n.x-3.2}" cy="${n.y-4.5}" rx="2.8" ry="4.5" fill="rgba(255,255,255,.6)" style="pointer-events:none"/>`;
+    const d=nailPathD(nailShape,n.x,n.y,n.rx,n.ry);
+    const col=nailColors[i], des=nailDesign[i]; const cid='ncl'+i;
+    let fill=col, over='';
+    if(des==='gradient'){ s+=g+`<defs><linearGradient id="ng${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(col,0.28)}"/><stop offset="1" stop-color="${shade(col,-0.10)}"/></linearGradient></defs>`; fill=`url(#ng${i})`; }
+    else { s+=g; }
+    s+=`<clipPath id="${cid}"><path d="${d}"/></clipPath>`;
+    s+=`<path class="nail" data-i="${i}" d="${d}" fill="${fill}" stroke="${i===nailSel?'#FF6E9C':'#E9BFA5'}" stroke-width="${i===nailSel?3.5:2.2}" stroke-linejoin="round"/>`;
+    if(des==='french') over=`<rect x="${n.x-n.rx-2}" y="${n.y-n.ry*1.6}" width="${n.rx*2+4}" height="${n.ry*0.8}" fill="#ffffff"/>`;
+    else if(des==='dots') over=`<g fill="#ffffff">`+[[-.3,-.2],[.35,-.35],[0,.12],[-.35,.35],[.32,.28]].map(o=>`<circle cx="${n.x+o[0]*n.rx*1.4}" cy="${n.y+o[1]*n.ry*1.4}" r="1.7"/>`).join('')+`</g>`;
+    else if(des==='glitter') over=`<g fill="#ffffff" opacity=".9">`+[[-.4,-.5],[.1,-.6],[.42,-.3],[-.5,0],[.35,.1],[-.15,.22],[.45,.45],[-.35,.5],[.05,.55]].map(o=>`<circle cx="${n.x+o[0]*n.rx*1.3}" cy="${n.y+o[1]*n.ry*1.3}" r="1"/>`).join('')+`</g><g fill="#FFDF8A">`+[[.16,-.26],[-.26,.36],[.3,-.5]].map(o=>`<circle cx="${n.x+o[0]*n.rx*1.3}" cy="${n.y+o[1]*n.ry*1.3}" r="1.3"/>`).join('')+`</g>`;
+    if(over) s+=`<g clip-path="url(#${cid})" style="pointer-events:none">${over}</g>`;
+    s+=`<ellipse cx="${n.x-3.2}" cy="${n.y-4.8}" rx="2.6" ry="4.2" fill="rgba(255,255,255,.5)" style="pointer-events:none"/>`;
     if(nailGem[i]) s+=`<text x="${n.x}" y="${n.y+5}" font-size="14" text-anchor="middle" style="pointer-events:none">${nailGem[i]}</text>`;
     s+=ge;
   });
@@ -988,6 +1000,8 @@ function initNail(){ renderNail(); if(nailInit)return; nailInit=true;
   const shapes=[['round','⚪','둥근'],['almond','🌰','아몬드'],['square','⬜','사각'],['point','🔻','뾰족']];
   const sc=$('#nailShapes'); shapes.forEach((sh,i)=>{ const b=el('button','tool'+(i===0?' sel':'')); b.innerHTML=sh[1]+'<span class="lbl">'+sh[2]+'</span>';
     b.onclick=()=>{nailShape=sh[0];sc.querySelectorAll('.tool').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');renderNail();beep(640);}; sc.appendChild(b);});
+  const des=$('#nailDesigns'); [['solid','단색'],['french','프렌치'],['gradient','그라데'],['glitter','글리터'],['dots','도트']].forEach((d,i)=>{ const b=el('button','tool'+(i===0?' sel':'')); b.innerHTML='<span class="lbl">'+d[1]+'</span>';
+    b.onclick=()=>{ nailDesign[nailSel]=d[0]; des.querySelectorAll('.tool').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); renderNail(); sparkle(innerWidth/2,innerHeight/2,3); beep(660);}; des.appendChild(b);});
   const pal=$('#nailPalette'); COLORS.forEach(c=>{ const s=el('div','swatch'); s.style.background=c;
     s.onclick=()=>{nailColors[nailSel]=c;renderNail();sparkle(innerWidth/2,innerHeight/2,3);beep(680);}; pal.appendChild(s);});
   const gems=$('#nailGems'); ['💎','⭐','💖','🌸','✨','❌'].forEach(g=>{ const b=el('button','tool'); b.textContent=g; b.style.fontSize='20px';
